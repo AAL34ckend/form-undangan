@@ -708,7 +708,7 @@
                             kakak berupa video rekam layar tanpa menampilkan info angpao dan gift, apakah kakak
                             berkenan? (setelah acara)</label>
                         <select id="izinPublishVideo" name="izinPublishVideo" required>
-                            <option value="" disabled selected>Pilih</option>
+                            <option value="" selected disabled>Pilih</option>
                             <option value="Iya">Iya</option>
                             <option value="Tidak">Tidak</option>
                         </select>
@@ -1739,12 +1739,10 @@
                     try {
                         const result = JSON.parse(responseText); // Coba parse sebagai JSON
                         if (result.result === 'success') {
-                            showNotificationModal("Sukses!", "Data berhasil dikirim!");
-                            // formElement.reset(); // Mengosongkan form setelah berhasil - DIHAPUS SESUAI PERMINTAAN
-                            // Clear previews and files after successful submission
+                            showNotificationModal("Data Berhasil Dikirim!", "Mohon melakukan SS (Screenshot) sebagai bukti kirim ke Whatsapp");
                             $('#imagePreviewContainer').empty();
                             filesToUpload = [];
-                            tampilkanUpload(); // Reset tampilan upload foto
+                            tampilkanUpload();
                         } else {
                             showNotificationModal("Gagal!", "Terjadi kesalahan: " + (result.error || "Unknown error"));
                         }
@@ -1761,14 +1759,84 @@
                 });
         });
 
+        // --- START: localStorage Save/Load Logic ---
+        function saveFormData() {
+            const form = document.getElementById('mempelaiForm');
+            const data = {};
+            // Iterate over all form elements
+            for (let i = 0; i < form.elements.length; i++) {
+                const element = form.elements[i];
+                if (element.id && element.name && element.type !== 'submit' && element.type !== 'file') {
+                    // For radio buttons, only save the checked one
+                    if (element.type === 'radio') {
+                        if (element.checked) {
+                            data[element.id] = element.value;
+                        }
+                    } else if (element.type === 'checkbox') {
+                        data[element.id] = element.checked;
+                    } else {
+                        data[element.id] = element.value;
+                    }
+                }
+            }
+            localStorage.setItem('formData', JSON.stringify(data));
+            // console.log("Form data saved to localStorage:", data); // For debugging
+        }
+
+        function loadFormData() {
+            const savedData = localStorage.getItem('formData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                // console.log("Loading form data from localStorage:", data); // For debugging
+                const form = document.getElementById('mempelaiForm');
+
+                for (const id in data) {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        if (element.type === 'radio') {
+                            // Check if the current radio button's value matches the saved value
+                            if (element.value === data[id]) {
+                                element.checked = true;
+                            }
+                        } else if (element.type === 'checkbox') {
+                            element.checked = data[id];
+                        } else {
+                            element.value = data[id];
+                        }
+                    }
+                }
+                document.getElementById('pakaiFoto')?.dispatchEvent(new Event('change'));
+                document.getElementById('urutan')?.dispatchEvent(new Event('change'));
+
+                [1, 2, 3].forEach(num => {
+                    const selectElement = document.getElementById(`tambahSelesai${num}`);
+                    if (selectElement) {
+                        toggleSelesai(num);
+                    }
+                });
+            }
+        }
+        // --- END: localStorage Save/Load Logic ---
+
         // Inisialisasi tampilan saat halaman dimuat
         document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('loadingModal').style.display = 'none';
             document.getElementById('notificationModal').style.display = 'none';
+            loadFormData();
             tampilkanUpload();
             toggleSelesai(1);
             toggleSelesai(2);
             toggleSelesai(3);
+
+            const formElements = document.getElementById('mempelaiForm').elements;
+            for (let i = 0; i < formElements.length; i++) {
+                const element = formElements[i];
+                // Only save data for elements that have an ID and a name, and are not submit/file inputs
+                if (element.id && element.name && element.type !== 'submit' && element.type !== 'file') {
+                    element.addEventListener('input', saveFormData);
+                    element.addEventListener('change', saveFormData); // For select boxes, checkboxes, radios
+                }
+            }
 
             // Accordion functionality
             var acc = document.getElementsByClassName("accordion");
