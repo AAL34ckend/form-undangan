@@ -687,7 +687,7 @@
                         </select>
                     </div>
                     <div id="uploadFoto" style="display: none;" class="form-group full-width">
-                        <label>- Unggah Foto (Maks. 10 gambar, maks 20MB/gambar)</label>
+                        <label>- Unggah Foto (Maks. 20 gambar, maks 20MB/gambar)</label>
                         <label>- Jika anda ingin mengirim foto nanti, abaikan upload foto ini</label>
                         <div class="upload__box">
                             <div class="upload__btn-box">
@@ -708,6 +708,7 @@
                             kakak berupa video rekam layar tanpa menampilkan info angpao dan gift, apakah kakak
                             berkenan? (setelah acara)</label>
                         <select id="izinPublishVideo" name="izinPublishVideo" required>
+                            <option value="" disabled selected>Pilih</option>
                             <option value="Iya">Iya</option>
                             <option value="Tidak">Tidak</option>
                         </select>
@@ -764,7 +765,7 @@
 
                                 <div class="form-group">
                                     <label for="inisialWanita" class="required">Inisial Nama Wanita:</label>
-                                    <input type="text" id="inisialWanita" name="inisialWanita" placeholder="Contoh: PD"
+                                    <input type="text" id="inisialWanita" name="inisialWanita" placeholder="Contoh: P"
                                         required>
                                 </div>
 
@@ -810,7 +811,7 @@
 
                                 <div class="form-group">
                                     <label for="inisialPria" class="required">Inisial Nama Pria:</label>
-                                    <input type="text" id="inisialPria" name="inisialPria" placeholder="Contoh: PI"
+                                    <input type="text" id="inisialPria" name="inisialPria" placeholder="Contoh: P"
                                         required>
                                 </div>
 
@@ -1405,7 +1406,7 @@
                     </div>
 
                     <div class="form-group full-width">
-                        <label for="judulLagu">Judul Lagu:</label>
+                        <label for="judulLagu">Link Musik Youtube:</label>
                         <input type="text" id="judulLagu" name="judulLagu"
                             placeholder="Contoh: Lagu Pernikahan Kita - Tiara Andini Ft. Arsy">
                     </div>
@@ -1539,7 +1540,7 @@
         });
 
         function ImgUploadCustom() {
-            const maxFiles = 15; // Maksimal 15 gambar
+            const maxFiles = 20; // Maksimal 15 gambar
             const maxFileSize = 20 * 1024 * 1024; // Maksimal 20MB per gambar (20 * 1024 * 1024 bytes)
 
             $('#fotoUpload').on('change', function (e) {
