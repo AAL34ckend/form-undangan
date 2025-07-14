@@ -1,0 +1,1785 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulir Data Undangan</title>
+    <!-- Google Fonts - Poppins for a modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome for modern icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- jQuery from CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <style>
+        /* Font Global */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f2f5;
+            /* Light gray background */
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            /* Ensure body takes full height */
+            font-size: 14px;
+            /* Set default font-size */
+        }
+
+        /* Form Container */
+        form {
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            max-width: 1100px;
+            width: 100%;
+            margin: 20px 0;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            font-weight: 700;
+            color: #2c3e50;
+            /* Darker text for headings */
+            margin-bottom: 25px;
+            font-size: 28px;
+        }
+
+        p {
+            text-align: left;
+            color: #555;
+            margin-bottom: 15px;
+            font-size: 15px;
+        }
+
+        ul {
+            text-align: left;
+            list-style-type: none;
+            padding: 0;
+            margin-bottom: 30px;
+            color: #666;
+            font-size: 14px;
+            font-weight: 500;
+            font-style: italic;
+        }
+
+        ul li {
+            margin-bottom: 5px;
+        }
+
+        ul li a {
+            color: #28a745;
+            /* Green link color */
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        ul li a:hover {
+            text-decoration: underline;
+        }
+
+        /* Accordion Group (button + panel) */
+        .accordion-group {
+            margin: 1.2rem;
+        }
+
+        /* Accordion Styles */
+        .accordion {
+            background-color: #e9ecef;
+            color: #34495e;
+            cursor: pointer;
+            padding: 16px 20px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .accordion .icon {
+            font-size: 22px;
+            margin-right: 12px;
+            color: #28a745;
+            /* Accent color for icons (green) */
+            transition: color 0.3s ease;
+        }
+
+        .accordion:hover,
+        .accordion.active {
+            background-color: #28a745;
+            color: white;
+            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
+        }
+
+        .accordion:hover .icon,
+        .accordion.active .icon {
+            color: white;
+        }
+
+        .accordion-content {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+        }
+
+        /* Caret icon styling */
+        .accordion-caret {
+            font-size: 1.2em;
+            /* Make caret slightly larger */
+            margin-left: 15px;
+            /* Space between text and caret */
+        }
+
+        .accordion-caret .fa-caret-up {
+            display: none;
+            /* Hide up caret by default */
+        }
+
+        .accordion-caret .fa-caret-down {
+            display: inline-block;
+            /* Show down caret by default */
+        }
+
+        /* When accordion is active, show up caret and hide down caret */
+        .accordion.active .accordion-caret .fa-caret-up {
+            display: inline-block;
+        }
+
+        .accordion.active .accordion-caret .fa-caret-down {
+            display: none;
+        }
+
+
+        /* Panel styles - Initially hidden, becomes grid when active */
+        .panel {
+            display: none;
+            padding: 15px 20px 25px;
+            /* grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); */
+            gap: 20px;
+            background-color: #f8f9fa;
+            border-left: 4px solid #28a745;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            margin-top: -10px;
+            margin-bottom: 0;
+            overflow: hidden;
+        }
+
+        /* Show panel as grid when its preceding accordion button is active */
+        .accordion.active+.panel {
+            display: grid;
+        }
+
+
+        /* Form Group for each label-input pair */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            /* Stack label above input */
+        }
+
+        /* Make certain form groups take full width in the inner panel grid */
+
+        /* Input Fields */
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group input[type="email"],
+        .form-group input[type="url"],
+        .form-group input[type="datetime-local"],
+        .form-group input[type="date"],
+        .form-group input[type="time"],
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            /* Fill the form-group container */
+            padding: 12px;
+            margin: 5px 0;
+            /* Adjust vertical margin within form-group */
+            border: 1px solid #ced4da;
+            /* Light gray border */
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            /* Include padding in width */
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #28a745;
+            /* Green focus border */
+            box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.25);
+            /* Green shadow */
+            outline: none;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-group label {
+            font-size: 17px;
+            margin-top: 0;
+            /* No top margin for label inside form-group */
+            margin-bottom: 5px;
+            /* Small margin below label */
+            display: block;
+            color: #495057;
+            /* Darker gray for labels */
+            font-weight: 500;
+        }
+
+        .required:after {
+            content: " *";
+            color: #dc3545;
+            /* Red for required indicator */
+            margin-left: 2px;
+        }
+
+        small {
+            color: #6c757d;
+            font-size: 12px;
+            display: block;
+            margin-top: -5px;
+            margin-bottom: 10px;
+        }
+
+        /* Submit Button */
+        input[type="submit"] {
+            background-color: #28a745;
+            /* Green for submit */
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            width: 100%;
+            padding: 15px 0;
+            border-radius: 10px;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            margin-top: 5rem;
+            float: right;
+            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.2);
+        }
+
+        input[type="submit"]:hover {
+            background-color: #218838;
+            /* Darker green on hover */
+            box-shadow: 0 6px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            /* Higher z-index for modals */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        #waitingText {
+            font-size: 16px;
+            color: #333;
+            margin-top: 20px;
+            font-weight: 500;
+        }
+
+        .spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #28a745;
+            /* Green spinner */
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1.2s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        #notificationModal .modal-content {
+            background-color: #fff;
+            border: 1px solid #dcdcdc;
+        }
+
+        #notificationTitle {
+            font-size: 22px;
+            font-weight: 700;
+            color: #28a745;
+            /* Green title */
+            margin-bottom: 15px;
+        }
+
+        #notificationMessage {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        #notificationModal button {
+            background-color: #28a745;
+            /* Green button */
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 5px rgba(40, 167, 69, 0.2);
+            /* Green shadow */
+        }
+
+        #notificationModal button:hover {
+            background-color: #006718;
+            /* Darker green on hover */
+            box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+        }
+
+        /* Image Upload Section */
+        .upload__box {
+            padding: 15px 0;
+            border: 1px dashed #ced4da;
+            /* Dashed border for upload area */
+            border-radius: 10px;
+            background-color: #fff;
+            text-align: center;
+            margin-top: 15px;
+            margin-bottom: 20px;
+        }
+
+        .upload__inputfile {
+            width: .1px;
+            height: .1px;
+            opacity: 0;
+            overflow: hidden;
+            position: absolute;
+            z-index: -1;
+        }
+
+        .upload__btn-box {
+            margin-bottom: 15px;
+        }
+
+        .upload__btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            background-color: #28a745;
+            /* Primary green for upload button */
+            border: 2px solid #28a745;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            padding: 10px 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            line-height: 1.5;
+            box-shadow: 0 2px 5px rgba(40, 167, 69, 0.2);
+            /* Green shadow */
+        }
+
+        .upload__btn>span {
+            color: #fff;
+        }
+
+        .upload__btn:hover {
+            background-color: #006718;
+            border-color: #006718;
+            box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+        }
+
+        .upload__img-wrap {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            /* Responsive grid */
+            gap: 10px;
+            padding: 0 15px;
+            margin-top: 15px;
+        }
+
+        .upload__img-box {
+            position: relative;
+            width: 100%;
+            padding-bottom: 100%;
+            /* Square aspect ratio */
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .img-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            border-radius: 8px;
+        }
+
+        .upload__img-close {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: rgba(220, 53, 69, 0.8);
+            /* Red with transparency */
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 2;
+            transition: background-color 0.2s ease;
+        }
+
+        .upload__img-close:hover {
+            background-color: rgba(200, 35, 51, 0.9);
+        }
+
+        /* Responsive Adjustments */
+        @media (min-width: 992px) {
+            .main-form-wrapper {
+                grid-template-columns: repeat(3, 1fr);
+                /* 3 columns on large screens */
+            }
+        }
+
+
+        @media (max-width: 768px) {
+            form {
+                padding: 10px;
+                margin: 10px auto;
+                max-width: 100%;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .accordion {
+                font-size: 15px;
+                padding: 10px 14px;
+            }
+
+            .form-group label,
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                font-size: 12px;
+            }
+
+            .form-group input[type="text"],
+            .form-group input[type="number"],
+            .form-group input[type="email"],
+            .form-group input[type="url"],
+            .form-group input[type="datetime-local"],
+            .form-group input[type="date"],
+            .form-group input[type="time"],
+            .form-group select,
+            .form-group textarea {
+                width: 100%;
+                /* Fill the form-group container */
+                margin: 5px 0;
+                /* Adjust vertical margin within form-group */
+                border: 1px solid #ced4da;
+                /* Light gray border */
+                border-radius: 8px;
+                font-size: 12px;
+                font-family: 'Poppins', sans-serif;
+                transition: all 0.3s ease;
+                box-sizing: border-box;
+                /* Include padding in width */
+            }
+
+            input[type="submit"] {
+                font-size: 16px;
+                padding: 12px 0;
+                width: 100%;
+            }
+
+
+            .modal-content {
+                padding: 25px;
+            }
+
+            .upload__img-wrap {
+                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+                gap: 8px;
+            }
+
+            .upload__img-box {
+                width: 100%;
+                /* Make sure it scales within its grid cell */
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            h1 {
+                font-size: 17px;
+            }
+
+            .accordion-group {
+                margin: 10px;
+            }
+
+            .accordion {
+                font-size: 10px;
+            }
+
+            .panel {
+                font-size: 10px;
+                padding: 10px;
+            }
+
+            label {
+                font-size: 10px;
+            }
+
+            .form-group label,
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                font-size: 10px;
+            }
+
+            .upload__img-wrap {
+                grid-template-columns: repeat(3, 1fr);
+                /* 3 columns on very small screens */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <form id="mempelaiForm" enctype="multipart/form-data">
+        <h1>Formulir Data Undangan</h1>
+        <p><strong>HARAP BACA SEBELUM MENGISI FORMNYA:</strong></p>
+        <ul>
+            <li>- Yang bertanda <span class="required"></span> wajib diisi</li>
+            <li>- Pastikan penulisan sesuai EYD</li>
+        </ul>
+
+        <div class="main-form-wrapper">
+            <!-- Accordion Data Pesanan -->
+            <div class="accordion-group">
+                <button type="button" class="accordion">
+                    <div class="accordion-content">
+                        <span class="icon"><i class="fas fa-clipboard-list"></i></span> Data Pesanan<span
+                            class="required"></span>
+                    </div>
+                    <div class="accordion-caret">
+                        <i class="fa-solid fa-caret-down"></i>
+                        <i class="fa-solid fa-caret-up"></i>
+                    </div>
+                </button>
+                <div class="panel">
+                    <div class="form-group">
+                        <label for="namaPemesan" class="required">Nama Kedua Mempelai Diharapkan Nama Pendek
+                            Saja:</label>
+                        <input type="text" id="namaPemesan" name="namaPemesan" placeholder="Contoh: Putra & Putri"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="whatsapp" class="required">Nomor WhatsApp Pemesan:</label>
+                        <input type="number" id="whatsapp" name="whatsapp" placeholder="Contoh: 081234567890" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="emailPemesan" class="required">Email Pemesan:</label>
+                        <input type="email" id="emailPemesan" name="emailPemesan" placeholder="Contoh: rudi@example.com"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tema" class="required">Tema:</label>
+                        <input type="text" name="tema" id="tema" placeholder="Contoh: Adat Jawa" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bahasaUndangan" class="required">Bahasa Undangan:</label>
+                        <select id="bahasaUndangan" name="bahasaUndangan" required>
+                            <option value="" disabled selected>Pilih Bahasa Undangan</option>
+                            <option value="Indonesia">Indonesia</option>
+                            <option value="English">English</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="versiUndangan" class="required">Versi Undangan:</label>
+                        <select id="versiUndangan" name="versiUndangan" required>
+                            <option value="" disabled selected>Pilih Versi Undangan</option>
+                            <option value="Islam">Islam</option>
+                            <option value="Selain Islam">Selain Islam</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pakaiFoto" class="required">Apakah Pakai Foto?</label>
+                        <select id="pakaiFoto" name="pakaiFoto" required onchange="tampilkanUpload()">
+                            <option value="tidak" selected>Tidak</option>
+                            <option value="ya">Ya</option>
+                        </select>
+                    </div>
+                    <div id="uploadFoto" style="display: none;" class="form-group full-width">
+                        <label>- Unggah Foto (Maks. 10 gambar, maks 20MB/gambar)</label>
+                        <label>- Jika anda ingin mengirim foto nanti, abaikan upload foto ini</label>
+                        <div class="upload__box">
+                            <div class="upload__btn-box">
+                                <label class="upload__btn">
+                                    <span><i class="fa-solid fa-arrow-up-from-bracket"></i> Pilih Foto</span>
+                                    <input type="file" multiple="" data-max_length="15" class="upload__inputfile"
+                                        id="fotoUpload" name="fotoUpload[]"
+                                        accept="image/jpeg, image/png, image/gif, image/webp" required>
+                                </label>
+                            </div>
+                            <br>
+                            <div class="upload__img-wrap" id="imagePreviewContainer"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="izinPublishVideo" class="required">Jika Galipat Story mempublikasikan undangan
+                            kakak berupa video rekam layar tanpa menampilkan info angpao dan gift, apakah kakak
+                            berkenan? (setelah acara)</label>
+                        <select id="izinPublishVideo" name="izinPublishVideo" required>
+                            <option value="Iya">Iya</option>
+                            <option value="Tidak">Tidak</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accordion Data Mempelai -->
+            <div class="accordion-group">
+                <button type="button" class="accordion">
+                    <div class="accordion-content">
+                        <span class="icon"><i class="fa-solid fa-ring"></i></span> Data Mempelai<span
+                            class="required"></span>
+                    </div>
+                    <div class="accordion-caret">
+                        <i class="fa-solid fa-caret-down"></i>
+                        <i class="fa-solid fa-caret-up"></i>
+                    </div>
+                </button>
+                <div class="panel">
+                    <div class="form-group">
+                        <label for="urutan" class="required">Urutan Mempelai:</label>
+                        <select id="urutan" name="urutan" required>
+                            <option value="wanita">Mempelai Wanita Dulu</option>
+                            <option value="pria">Mempelai Pria Dulu</option>
+                        </select>
+                    </div>
+                    <!-- Container baru untuk bagian mempelai yang bisa diurutkan -->
+                    <div id="mempelaiSectionsContainer" style="grid-column: 1 / -1; display: contents;">
+                        <!-- Mempelai Wanita Section -->
+                        <div id="wanitaMempelaiSection" class="accordion-group">
+                            <button type="button" class="accordion">
+                                <div class="accordion-content">
+                                    <span class="icon"><i class="fas fa-venus"></i></span> Data Mempelai Wanita<span
+                                        class="required"></span>
+                                </div>
+                                <div class="accordion-caret">
+                                    <i class="fa-solid fa-caret-down"></i>
+                                    <i class="fa-solid fa-caret-up"></i>
+                                </div>
+                            </button>
+                            <div class="panel">
+                                <div class="form-group">
+                                    <label for="namaLengkapWanita" class="required">Nama Lengkap Wanita:</label>
+                                    <input type="text" id="namaLengkapWanita" name="namaLengkapWanita"
+                                        placeholder="Contoh: Putri Diana" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="namaPanggilanWanita" class="required">Nama Panggilan Wanita:</label>
+                                    <input type="text" id="namaPanggilanWanita" name="namaPanggilanWanita"
+                                        placeholder="Contoh: Putri" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="inisialWanita" class="required">Inisial Nama Wanita:</label>
+                                    <input type="text" id="inisialWanita" name="inisialWanita" placeholder="Contoh: PD"
+                                        required>
+                                </div>
+
+                                <div class="form-group full-width">
+                                    <label for="deskripsiWanita" class="required">Deskripsi Wanita:</label>
+                                    <textarea id="deskripsiWanita" name="deskripsiWanita"
+                                        placeholder="Contoh: Putri Pertama dari Bp. Adam & Ibu Hawa"
+                                        required></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="instagramWanita">Instagram Wanita:</label>
+                                    <input type="text" id="instagramWanita" name="instagramWanita"
+                                        placeholder="Contoh: @putridiana_">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mempelai Pria Section -->
+                        <div id="priaMempelaiSection" class="accordion-group">
+                            <button type="button" class="accordion">
+                                <div class="accordion-content">
+                                    <span class="icon"><i class="fas fa-mars"></i></span> Data Mempelai Pria<span
+                                        class="required"></span>
+                                </div>
+                                <div class="accordion-caret">
+                                    <i class="fa-solid fa-caret-down"></i>
+                                    <i class="fa-solid fa-caret-up"></i>
+                                </div>
+                            </button>
+                            <div class="panel">
+                                <div class="form-group">
+                                    <label for="namaLengkapPria" class="required">Nama Lengkap Pria:</label>
+                                    <input type="text" id="namaLengkapPria" name="namaLengkapPria"
+                                        placeholder="Contoh: Putra Irawan" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="namaPanggilanPria" class="required">Nama Panggilan Pria:</label>
+                                    <input type="text" id="namaPanggilanPria" name="namaPanggilanPria"
+                                        placeholder="Contoh: Putra" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="inisialPria" class="required">Inisial Nama Pria:</label>
+                                    <input type="text" id="inisialPria" name="inisialPria" placeholder="Contoh: PI"
+                                        required>
+                                </div>
+
+                                <div class="form-group full-width">
+                                    <label for="deskripsiPria" class="required">Deskripsi Pria:</label>
+                                    <textarea id="deskripsiPria" name="deskripsiPria"
+                                        placeholder="Putra Kedua dari Bp. Adam & Ibu Hawa" required></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="instagramPria">Instagram Pria:</label>
+                                    <input type="text" id="instagramPria" name="instagramPria"
+                                        placeholder="Contoh: @putrairawan">
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- Akhir mempelaiSectionsContainer -->
+                </div>
+            </div>
+
+            <!-- Accordion Data Acara -->
+            <div class="accordion-group">
+                <button type="button" class="accordion">
+                    <div class="accordion-content">
+                        <span class="icon"><i class="fas fa-calendar-check"></i></span> Data Acara <span
+                            class="required"></span>
+                    </div>
+                    <div class="accordion-caret">
+                        <i class="fa-solid fa-caret-down"></i>
+                        <i class="fa-solid fa-caret-up"></i>
+                    </div>
+                </button>
+                <div class="panel">
+                    <div class="accordion-group">
+                        <button type="button" class="accordion">
+                            <div class="accordion-content">
+                                <span class="icon"><i class="fas fa-star"></i></span> Tanggal Acara Utama <span
+                                    class="required"></span>
+                            </div>
+                            <div class="accordion-caret">
+                                <i class="fa-solid fa-caret-down"></i>
+                                <i class="fa-solid fa-caret-up"></i>
+                            </div>
+                        </button>
+                        <div class="panel">
+                            <div class="form-group">
+                                <label for="datetimeAcaraUtama" class="required">Tanggal Acara Utama:</label>
+                                <input type="datetime-local" id="datetimeAcaraUtama" name="datetimeAcaraUtama" required>
+                                <small>Tanggal acara utama akan ditampilkan di cover</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-group">
+                        <button type="button" class="accordion">
+                            <div class="accordion-content">
+                                <span class="icon"><i class="fas fa-1"></i></span> Acara 1
+                            </div>
+                            <div class="accordion-caret">
+                                <i class="fa-solid fa-caret-down"></i>
+                                <i class="fa-solid fa-caret-up"></i>
+                            </div>
+                        </button>
+                        <div class="panel">
+                            <div class="form-group">
+                                <label for="namaAcara1" class="required">Nama Acara 1:</label>
+                                <input type="text" id="namaAcara1" name="namaAcara1" placeholder="Contoh: Akad Nikah"
+                                    required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="tanggalAcara1" class="required">Tanggal Acara 1:</label>
+                                <input type="date" id="tanggalAcara1" name="tanggalAcara1" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="waktuAcara1" class="required">Waktu Acara 1:</label>
+                                <input type="time" id="waktuAcara1" name="waktuAcara1" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="tambahSelesai1">Apakah Anda ingin menambahkan waktu selesai?</label>
+                                <select id="tambahSelesai1" name="tambahSelesai1" onchange="toggleSelesai(1)">
+                                    <option value="no">Tidak</option>
+                                    <option value="yes">Ya</option>
+                                </select>
+                            </div>
+
+                            <div id="waktuSelesaiDiv1" style="display:none;" class="form-group">
+                                <label for="waktuAcaraSelesai1" class="required">Waktu Selesai Acara 1:</label>
+                                <input type="time" id="waktuAcaraSelesai1" name="waktuAcaraSelesai1">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="zonaWaktuAcara1" class="required">Zona Waktu Acara 1:</label>
+                                <select id="zonaWaktuAcara1" name="zonaWaktuAcara1" required>
+                                    <option value="">Pilih Zona Waktu</option>
+                                    <option value="WIB">WIB (Waktu Indonesia Barat)</option>
+                                    <option value="WITA">WITA (Waktu Indonesia Tengah)</option>
+                                    <option value="WIT">WIT (Waktu Indonesia Timur)</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="lokasiAcara1" class="required">Lokasi Acara 1:</label>
+                                <input type="text" id="lokasiAcara1" name="lokasiAcara1" placeholder="Contoh: KUA"
+                                    required>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="alamatAcara1" class="required">Alamat Acara 1:</label>
+                                <textarea id="alamatAcara1" name="alamatAcara1"
+                                    placeholder="Jl. Adi Sumarmo No. 329, Colomadu, Karanganyar, Plalangan, Klodran, Kec. Colomadu, Kabupaten Kebumen"
+                                    required></textarea>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="googleMapsAcara1">Google Maps Acara 1:</label>
+                                <input type="url" id="googleMapsAcara1" name="googleMapsAcara1"
+                                    placeholder="Contoh: https://goo.gl/maps/...">
+                                <span style="margin-top: 10px;">
+                                    <small>Temukan lokasi acara di Google Maps : <a
+                                            href="https://www.google.com/maps/@-7.4335803,110.5838329,11z?entry=ttu&g_ep=EgoyMDI1MDcwOS4wIKXMDSoASAFQAw%3D%3D"
+                                            style="text-decoration: none;color:rgb(0, 110, 255)" target="_blank">Buka
+                                            Google
+                                            Maps</a></small>
+
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-group">
+                        <button type="button" class="accordion">
+                            <div class="accordion-content">
+                                <span class="icon"><i class="fas fa-2"></i></span> Acara 2
+                            </div>
+                            <div class="accordion-caret">
+                                <i class="fa-solid fa-caret-down"></i>
+                                <i class="fa-solid fa-caret-up"></i>
+                            </div>
+                        </button>
+                        <div class="panel">
+                            <div class="form-group">
+                                <label for="namaAcara2">Nama Acara 2:</label>
+                                <input type="text" id="namaAcara2" name="namaAcara2" placeholder="Resepsi">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="tanggalAcara2">Tanggal Acara 2:</label>
+                                <input type="date" id="tanggalAcara2" name="tanggalAcara2">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="waktuAcara2">Waktu Acara 2:</label>
+                                <input type="time" id="waktuAcara2" name="waktuAcara2">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="tambahSelesai2">Apakah Anda ingin menambahkan waktu selesai?</label>
+                                <select id="tambahSelesai2" name="tambahSelesai2" onchange="toggleSelesai(2)">
+                                    <option value="no">Tidak</option>
+                                    <option value="yes">Ya</option>
+                                </select>
+                            </div>
+
+                            <div id="waktuSelesaiDiv2" style="display:none;" class="form-group">
+                                <label for="waktuAcaraSelesai2">Waktu Selesai Acara 2:</label>
+                                <input type="time" id="waktuAcaraSelesai2" name="waktuAcaraSelesai2">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="zonaWaktuAcara2">Zona Waktu Acara 2:</label>
+                                <select id="zonaWaktuAcara2" name="zonaWaktuAcara2">
+                                    <option value="">Pilih Zona Waktu</option>
+                                    <option value="WIB">WIB (Waktu Indonesia Barat)</option>
+                                    <option value="WITA">WITA (Waktu Indonesia Tengah)</option>
+                                    <option value="WIT">WIT (Waktu Indonesia Timur)</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="lokasiAcara2">Lokasi Acara 2:</label>
+                                <input type="text" id="lokasiAcara2" name="lokasiAcara2"
+                                    placeholder="Kediaman Mempelai Wanita">
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="alamatAcara2">Alamat Acara 2:</label>
+                                <textarea id="alamatAcara2" name="alamatAcara2"
+                                    placeholder="Jl. Adi Sumarmo No. 329, Colomadu, Karanganyar, Plalangan, Klodran, Kec. Colomadu, Kabupaten Kebumen"></textarea>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="googleMapsAcara2">Google Maps Acara 2:</label>
+                                <input type="url" id="googleMapsAcara2" name="googleMapsAcara2"
+                                    placeholder="Contoh: https://goo.gl/maps/...">
+                                <span style="margin-top: 10px;">
+                                    <small>Temukan lokasi acara di Google Maps : <a
+                                            href="https://www.google.com/maps/@-7.4335803,110.5838329,11z?entry=ttu&g_ep=EgoyMDI1MDcwOS4wIKXMDSoASAFQAw%3D%3D"
+                                            style="text-decoration: none;color:rgb(0, 110, 255)" target="_blank">Buka
+                                            Google
+                                            Maps</a></small>
+
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-group">
+                        <button type="button" class="accordion">
+                            <div class="accordion-content">
+                                <span class="icon"><i class="fas fa-3"></i></span> Acara 3
+                            </div>
+                            <div class="accordion-caret">
+                                <i class="fa-solid fa-caret-down"></i>
+                                <i class="fa-solid fa-caret-up"></i>
+                            </div>
+                        </button>
+                        <div class="panel">
+                            <div class="form-group">
+                                <label for="namaAcara3">Nama Acara 3:</label>
+                                <input type="text" id="namaAcara3" name="namaAcara3"
+                                    placeholder="Contoh: Ngunduh Mantu">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="tanggalAcara3">Tanggal Acara 3:</label>
+                                <input type="date" id="tanggalAcara3" name="tanggalAcara3">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="waktuAcara3">Waktu Acara 3:</label>
+                                <input type="time" id="waktuAcara3" name="waktuAcara3">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="tambahSelesai3">Apakah Anda ingin menambahkan waktu selesai?</label>
+                                <select id="tambahSelesai3" name="tambahSelesai3" onchange="toggleSelesai(3)">
+                                    <option value="no">Tidak</option>
+                                    <option value="yes">Ya</option>
+                                </select>
+                            </div>
+
+                            <div id="waktuSelesaiDiv3" style="display:none;" class="form-group">
+                                <label for="waktuAcaraSelesai3">Waktu Selesai Acara 3:</label>
+                                <input type="time" id="waktuAcaraSelesai3" name="waktuAcaraSelesai3">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="zonaWaktuAcara3">Zona Waktu Acara 3:</label>
+                                <select id="zonaWaktuAcara3" name="zonaWaktuAcara3">
+                                    <option value="">Pilih Zona Waktu</option>
+                                    <option value="WIB">WIB (Waktu Indonesia Barat)</option>
+                                    <option value="WITA">WITA (Waktu Indonesia Tengah)</option>
+                                    <option value="WIT">WIT (Waktu Indonesia Timur)</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="lokasiAcara3">Lokasi Acara 3:</label>
+                                <input type="text" id="lokasiAcara3" name="lokasiAcara3"
+                                    placeholder="Kediaman Mempelai Pria">
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="alamatAcara3">Alamat Acara 3:</label>
+                                <textarea id="alamatAcara3" name="alamatAcara3"
+                                    placeholder="Jl. Adi Sumarmo No. 329, Colomadu, Karanganyar, Plalangan, Klodran, Kec. Colomadu, Kabupaten Kebumen"></textarea>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="googleMapsAcara3">Google Maps Acara 3:</label>
+                                <input type="url" id="googleMapsAcara3" name="googleMapsAcara3"
+                                    placeholder="Contoh: https://goo.gl/maps/...">
+                                <span style="margin-top: 10px;">
+                                    <small>Temukan lokasi acara di Google Maps : <a
+                                            href="https://www.google.com/maps/@-7.4335803,110.5838329,11z?entry=ttu&g_ep=EgoyMDI1MDcwOS4wIKXMDSoASAFQAw%3D%3D"
+                                            style="text-decoration: none;color:rgb(0, 110, 255)" target="_blank">Buka
+                                            Google
+                                            Maps</a></small>
+
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accordion Data Love Story -->
+            <div class="accordion-group">
+                <button type="button" class="accordion">
+                    <div class="accordion-content">
+                        <span class="icon"><i class="fa-solid fa-people-arrows"></i></span> Data Love Story
+                    </div>
+                    <div class="accordion-caret">
+                        <i class="fa-solid fa-caret-down"></i>
+                        <i class="fa-solid fa-caret-up"></i>
+                    </div>
+                </button>
+                <div class="panel">
+                    <div class="accordion-group">
+                        <button type="button" class="accordion">
+                            <div class="accordion-content">
+                                <span class="icon"><i class="fas fa-1"></i></span> Love Story 1
+                            </div>
+                            <div class="accordion-caret">
+                                <i class="fa-solid fa-caret-down"></i>
+                                <i class="fa-solid fa-caret-up"></i>
+                            </div>
+                        </button>
+                        <div class="panel">
+                            <div class="form-group">
+                                <label for="judulLoveStory1">Judul Love Story 1:</label>
+                                <input type="text" id="judulLoveStory1" name="judulLoveStory1"
+                                    placeholder="Contoh: Kisah Pertemuan">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="tanggalLoveStory1">Tanggal Love Story 1:</label>
+                                <input type="text" id="tanggalLoveStory1" name="tanggalLoveStory1"
+                                    placeholder="Contoh: 10 Februari 2023">
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="deskripsiLoveStory1">Deskripsi Love Story 1:</label>
+                                <textarea id="deskripsiLoveStory1" name="deskripsiLoveStory1"
+                                    placeholder="Cerita cinta antara kedua mempelai"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-group">
+                        <button type="button" class="accordion">
+                            <div class="accordion-content">
+                                <span class="icon"><i class="fas fa-2"></i></span> Love Story 2
+                            </div>
+                            <div class="accordion-caret">
+                                <i class="fa-solid fa-caret-down"></i>
+                                <i class="fa-solid fa-caret-up"></i>
+                            </div>
+                        </button>
+                        <div class="panel">
+                            <div class="form-group">
+                                <label for="judulLoveStory2">Judul Love Story 2:</label>
+                                <input type="text" id="judulLoveStory2" name="judulLoveStory2"
+                                    placeholder="Contoh: Momen Pertama Bertemu">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="tanggalLoveStory2">Tanggal Love Story 2:</label>
+                                <input type="text" id="tanggalLoveStory2" name="tanggalLoveStory2"
+                                    placeholder="Contoh: 15 Februari 2023">
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="deskripsiLoveStory2">Deskripsi Love Story 2:</label>
+                                <textarea id="deskripsiLoveStory2" name="deskripsiLoveStory2"
+                                    placeholder="Cerita manis kedua mempelai"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-group">
+                        <button type="button" class="accordion">
+                            <div class="accordion-content">
+                                <span class="icon"><i class="fas fa-3"></i></span> Love Story 3
+                            </div>
+                            <div class="accordion-caret">
+                                <i class="fa-solid fa-caret-down"></i>
+                                <i class="fa-solid fa-caret-up"></i>
+                            </div>
+                        </button>
+                        <div class="panel">
+                            <div class="form-group">
+                                <label for="judulLoveStory3">Judul Love Story 3:</label>
+                                <input type="text" id="judulLoveStory3" name="judulLoveStory3"
+                                    placeholder="Contoh: Proses Lamaran">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="tanggalLoveStory3">Tanggal Love Story 3:</label>
+                                <input type="text" id="tanggalLoveStory3" name="tanggalLoveStory3"
+                                    placeholder="Contoh: 25 Februari 2023">
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="deskripsiLoveStory3">Deskripsi Love Story 3:</label>
+                                <textarea id="deskripsiLoveStory3" name="deskripsiLoveStory3"
+                                    placeholder="Kisah indah lamaran mereka"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-group">
+                        <button type="button" class="accordion">
+                            <div class="accordion-content">
+                                <span class="icon"><i class="fas fa-4"></i></span> Love Story 4
+                            </div>
+                            <div class="accordion-caret">
+                                <i class="fa-solid fa-caret-down"></i>
+                                <i class="fa-solid fa-caret-up"></i>
+                            </div>
+                        </button>
+                        <div class="panel">
+                            <div class="form-group">
+                                <label for="judulLoveStory4">Judul Love Story 4:</label>
+                                <input type="text" id="judulLoveStory4" name="judulLoveStory4"
+                                    placeholder="Contoh: Hari Bahagia">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="tanggalLoveStory4">Tanggal Love Story 4:</label>
+                                <input type="text" id="tanggalLoveStory4" name="tanggalLoveStory4"
+                                    placeholder="Contoh: 10 Maret 2024">
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="deskripsiLoveStory4">Deskripsi Love Story 4:</label>
+                                <textarea id="deskripsiLoveStory4" name="deskripsiLoveStory4"
+                                    placeholder="Cerita hari pernikahan"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accordion Kado Digital -->
+            <div class="accordion-group">
+                <button type="button" class="accordion">
+                    <div class="accordion-content">
+                        <span class="icon"><i class="fas fa-credit-card"></i></span> Kado Digital
+                    </div>
+                    <div class="accordion-caret">
+                        <i class="fa-solid fa-caret-down"></i>
+                        <i class="fa-solid fa-caret-up"></i>
+                    </div>
+                </button>
+                <div class="panel">
+                    <div class="accordion-group">
+                        <button type="button" class="accordion">
+                            <div class="accordion-content">
+                                <span class="icon"><i class="fas fa-1"></i></span> Rekening 1
+                            </div>
+                            <div class="accordion-caret">
+                                <i class="fa-solid fa-caret-down"></i>
+                                <i class="fa-solid fa-caret-up"></i>
+                            </div>
+                        </button>
+                        <div class="panel">
+                            <div class="form-group">
+                                <label for="namaPemilikRekening1">Nama Pemilik Rekening 1:</label>
+                                <input type="text" id="namaPemilikRekening1" name="namaPemilikRekening1"
+                                    placeholder="Contoh: Putra Irawan">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="nomorRekening1">Nomor Rekening 1:</label>
+                                <input type="number" id="nomorRekening1" name="nomorRekening1"
+                                    placeholder="Contoh: 123456789">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="namaBank1">Nama Bank 1:</label>
+                                <input type="text" id="namaBank1" name="namaBank1" placeholder="Contoh: Bank BCA">
+                            </div>
+                            <div class="form-group">
+                                <label for="whatsappKonfirmasi1">Whatsapp Konfirmasi 1:</label>
+                                <input type="text" id="whatsappKonfirmasi1" name="whatsappKonfirmasi1"
+                                    placeholder="Contoh: 081234567890">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-group">
+                        <button type="button" class="accordion">
+                            <div class="accordion-content">
+                                <span class="icon"><i class="fas fa-2"></i></span> Rekening 2
+                            </div>
+                            <div class="accordion-caret">
+                                <i class="fa-solid fa-caret-down"></i>
+                                <i class="fa-solid fa-caret-up"></i>
+                            </div>
+                        </button>
+                        <div class="panel">
+                            <div class="form-group">
+                                <label for="namaPemilikRekening2">Nama Pemilik Rekening 2:</label>
+                                <input type="text" id="namaPemilikRekening2" name="namaPemilikRekening2"
+                                    placeholder="Contoh: Putri Diana">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="nomorRekening2">Nomor Rekening 2:</label>
+                                <input type="number" id="nomorRekening2" name="nomorRekening2"
+                                    placeholder="Contoh: 987654321">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="namaBank2">Nama Bank 2:</label>
+                                <input type="text" id="namaBank2" name="namaBank2" placeholder="Contoh: Bank Mandiri">
+                            </div>
+                            <div class="form-group">
+                                <label for="whatsappKonfirmasi2">Whatsapp Konfirmasi 2:</label>
+                                <input type="text" id="whatsappKonfirmasi2" name="whatsappKonfirmasi2"
+                                    placeholder="Contoh: 081234567890">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-group">
+                        <button type="button" class="accordion">
+                            <div class="accordion-content">
+                                <span class="icon"><i class="fas fa-3"></i></span> Rekening 3
+                            </div>
+                            <div class="accordion-caret">
+                                <i class="fa-solid fa-caret-down"></i>
+                                <i class="fa-solid fa-caret-up"></i>
+                            </div>
+                        </button>
+                        <div class="panel">
+                            <div class="form-group">
+                                <label for="namaPemilikRekening3">Nama Pemilik Rekening 3:</label>
+                                <input type="text" id="namaPemilikRekening3" name="namaPemilikRekening3"
+                                    placeholder="Contoh: Joko Widodo">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="nomorRekening3">Nomor Rekening 3:</label>
+                                <input type="number" id="nomorRekening3" name="nomorRekening3"
+                                    placeholder="Contoh: 1122334455">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="namaBank3">Nama Bank 3:</label>
+                                <input type="text" id="namaBank3" name="namaBank3" placeholder="Contoh: Bank BNI">
+                            </div>
+                            <div class="form-group">
+                                <label for="whatsappKonfirmasi3">Whatsapp Konfirmasi 3:</label>
+                                <input type="text" id="whatsappKonfirmasi3" name="whatsappKonfirmasi3"
+                                    placeholder="Contoh: 081234567890">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accordion Kado Fisik -->
+            <div class="accordion-group">
+                <button type="button" class="accordion">
+                    <div class="accordion-content">
+                        <span class="icon"><i class="fas fa-gift"></i></span> Kado Fisik
+                    </div>
+                    <div class="accordion-caret">
+                        <i class="fa-solid fa-caret-down"></i>
+                        <i class="fa-solid fa-caret-up"></i>
+                    </div>
+                </button>
+                <div class="panel">
+                    <div class="form-group">
+                        <label for="namaPenerimaKado">Nama Penerima Kado:</label>
+                        <input type="text" id="namaPenerimaKado" name="namaPenerimaKado" placeholder="Contoh: Joko">
+                    </div>
+                    <div class="form-group">
+                        <label for="whatsappKonfirmasiKadoFisik ">Whatsapp Konfirmasi :</label>
+                        <input type="text" id="whatsappKonfirmasiKadoFisik " name="whatsappKonfirmasiKadoFisik "
+                            placeholder="Contoh: 081234567890">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="alamatPengirimanKado">Alamat Pengiriman Kado:</label>
+                        <textarea id="alamatPengirimanKado" name="alamatPengirimanKado"
+                            placeholder="Alamat lengkap penerima"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accordion Lain-Lain -->
+            <div class="accordion-group">
+                <button type="button" class="accordion">
+                    <div class="accordion-content">
+                        <span class="icon"><i class="fas fa-link"></i></span> Lain-Lain
+                    </div>
+                    <div class="accordion-caret">
+                        <i class="fa-solid fa-caret-down"></i>
+                        <i class="fa-solid fa-caret-up"></i>
+                    </div>
+                </button>
+                <div class="panel">
+                    <div class="form-group full-width">
+                        <label for="linkLiveStreaming">Link Live Streaming:</label>
+                        <input type="url" id="linkLiveStreaming" name="linkLiveStreaming"
+                            placeholder="Contoh: https://link-live-streaming.com">
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="judulLagu">Judul Lagu:</label>
+                        <input type="text" id="judulLagu" name="judulLagu"
+                            placeholder="Contoh: Lagu Pernikahan Kita - Tiara Andini Ft. Arsy">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accordion Turut Mengundang -->
+            <div class="accordion-group">
+                <button type="button" class="accordion">
+                    <div class="accordion-content">
+                        <span class="icon"><i class="fa-solid fa-users"></i></span> Turut Mengundang
+                    </div>
+                    <div class="accordion-caret">
+                        <i class="fa-solid fa-caret-down"></i>
+                        <i class="fa-solid fa-caret-up"></i>
+                    </div>
+                </button>
+                <div class="panel">
+                    <div class="form-group full-width">
+                        <label for="turutMengundang">Daftar Pihak yang Turut Mengundang:</label>
+                        <textarea id="turutMengundang" name="turutMengundang"
+                            placeholder="Contoh: Keluarga Besar Bapak/Ibu [Nama Keluarga]"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <input type="submit" value="Kirim" class="sendBtn">
+    </form>
+
+    <div id="loadingModal" class="modal">
+        <div class="modal-content">
+            <div class="spinner"></div>
+            <span id="waitingText">Mohon tunggu sebentar, data Anda sedang dikirim...</span>
+        </div>
+    </div>
+
+    <div id="notificationModal" class="modal">
+        <div class="modal-content">
+            <h2 id="notificationTitle"></h2>
+            <p id="notificationMessage"></p>
+            <button onclick="closeNotificationModal()">Tutup</button>
+        </div>
+    </div>
+
+    <script>
+        // PENTING: Ganti URL ini dengan URL Aplikasi Web Apps Script Anda yang terbaru
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx1xspzNMAAnKLbVdBrJlNQxDzMdfDNidAgmWrQQSYhpuyjdAyjOsP68e9RmNLacwfS6Q/exec"; // Ganti dengan URL Anda
+
+        // Menyembunyikan modal saat pertama kali halaman dimuat
+        document.getElementById('loadingModal').style.display = 'none';
+        document.getElementById('notificationModal').style.display = 'none';
+
+        // Variable to store files selected for upload, to be used by the main form submission
+        let filesToUpload = [];
+
+        // Fungsi untuk menampilkan modal notifikasi
+        function showNotificationModal(title, message) {
+            document.getElementById('notificationTitle').innerText = title;
+            document.getElementById('notificationMessage').innerText = message;
+            document.getElementById('notificationModal').style.display = 'flex';
+        }
+
+        function toTitleCase(str) {
+            if (!str) return '';
+            return str.replace(/\w\S*/g, function (txt) {
+                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            });
+        }
+
+        // Fungsi untuk menutup modal notifikasi
+        function closeNotificationModal() {
+            document.getElementById('notificationModal').style.display = 'none';
+        }
+
+        // Fungsi untuk menukar urutan field berdasarkan pilihan dropdown
+        document.getElementById('urutan').addEventListener('change', function () {
+            var urutan = this.value;
+            var wanitaMempelaiSection = document.getElementById('wanitaMempelaiSection');
+            var priaMempelaiSection = document.getElementById('priaMempelaiSection');
+            var mempelaiSectionsContainer = document.getElementById('mempelaiSectionsContainer');
+
+            if (mempelaiSectionsContainer && wanitaMempelaiSection && priaMempelaiSection) {
+                if (urutan === 'wanita') {
+                    // Jika 'wanita' dipilih, pastikan wanita di atas pria
+                    mempelaiSectionsContainer.insertBefore(wanitaMempelaiSection, priaMempelaiSection);
+                } else { // urutan === 'pria'
+                    // Jika 'pria' dipilih, pastikan pria di atas wanita
+                    mempelaiSectionsContainer.insertBefore(priaMempelaiSection, wanitaMempelaiSection);
+                }
+            }
+        });
+
+
+        // Fungsi untuk menampilkan atau menyembunyikan field waktu selesai berdasarkan konfirmasi
+        function toggleSelesai(acaraNumber) {
+            var selectElement = document.getElementById('tambahSelesai' + acaraNumber);
+            var waktuSelesaiDiv = document.getElementById('waktuSelesaiDiv' + acaraNumber);
+
+            if (selectElement.value === 'yes') {
+                waktuSelesaiDiv.style.display = 'block';
+            } else {
+                waktuSelesaiDiv.style.display = 'none';
+                // Opsional: Bersihkan nilai waktu selesai jika disembunyikan
+                document.getElementById('waktuAcaraSelesai' + acaraNumber).value = '';
+            }
+        }
+
+        // Fungsi untuk menampilkan atau menyembunyikan upload foto berdasarkan pilihan dropdown
+        function tampilkanUpload() {
+            var pilihan = document.getElementById("pakaiFoto").value;
+            var uploadDiv = document.getElementById("uploadFoto");
+            var fotoUploadInput = document.getElementById('fotoUpload');
+            var imagePreviewContainer = document.getElementById('imagePreviewContainer');
+
+
+            if (pilihan === "ya") {
+                uploadDiv.style.display = "block";
+            } else {
+                uploadDiv.style.display = "none";
+                // Clear the file input and the preview when hidden
+                fotoUploadInput.value = '';
+                imagePreviewContainer.innerHTML = ''; // Clear previews
+                filesToUpload = []; // Clear the array of files to upload
+            }
+        }
+
+        // --- START: Integrated Image Upload and Preview Logic ---
+        jQuery(document).ready(function () {
+            ImgUploadCustom();
+        });
+
+        function ImgUploadCustom() {
+            const maxFiles = 15; // Maksimal 15 gambar
+            const maxFileSize = 20 * 1024 * 1024; // Maksimal 20MB per gambar (20 * 1024 * 1024 bytes)
+
+            $('#fotoUpload').on('change', function (e) {
+                const imgWrap = $('#imagePreviewContainer');
+                let newFiles = Array.from(e.target.files);
+
+                // Filter out files that exceed max size
+                const validNewFiles = [];
+                for (let i = 0; i < newFiles.length; i++) {
+                    const file = newFiles[i];
+                    if (file.size > maxFileSize) {
+                        showNotificationModal("Error Upload", "Ukuran file \"" + file.name + "\" melebihi batas 20MB. File ini akan diabaikan.");
+                    } else if (!file.type.match('image.*')) {
+                        showNotificationModal("Error Upload", "File \"" + file.name + "\" bukan format gambar yang didukung. File ini akan diabaikan.");
+                    } else {
+                        validNewFiles.push(file);
+                    }
+                }
+
+                // Add valid new files to filesToUpload, respecting maxFiles limit
+                for (let i = 0; i < validNewFiles.length; i++) {
+                    if (filesToUpload.length < maxFiles) {
+                        filesToUpload.push(validNewFiles[i]);
+                    } else {
+                        showNotificationModal("Error Upload", "Maksimal hanya dapat mengupload " + maxFiles + " foto. Beberapa file yang Anda pilih mungkin tidak ditambahkan.");
+                        break; // Stop adding files if max limit is reached
+                    }
+                }
+
+                // Clear current previews and re-render all files in filesToUpload
+                imgWrap.empty();
+                filesToUpload.forEach(function (f, index) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var html = "<div class='upload__img-box'><div style='background-image: url(" + e.target.result + ")' data-index='" + index + "' data-file='" + f.name + "' class='img-bg'><div class='upload__img-close'>x</div></div></div>";
+                        imgWrap.append(html);
+                    }
+                    reader.readAsDataURL(f);
+                });
+
+                // Clear the native file input to allow re-selection of the same files after removal
+                e.target.value = '';
+            });
+
+            $('body').on('click', ".upload__img-close", function (e) {
+                const fileNameToRemove = $(this).parent().data("file");
+                const indexToRemove = $(this).parent().data("index");
+
+                // Remove the file from filesToUpload array based on index
+                // Using index is more reliable if file names are not unique
+                if (indexToRemove !== undefined && filesToUpload[indexToRemove]) {
+                    filesToUpload.splice(indexToRemove, 1);
+                } else {
+                    // Fallback to name if index isn't found (though it should be)
+                    filesToUpload = filesToUpload.filter(file => file.name !== fileNameToRemove);
+                }
+
+                // Remove the preview element from the DOM
+                $(this).parent().parent().remove();
+
+                // Re-render previews to update data-index attributes if necessary (optional but good practice)
+                // This ensures subsequent removals use correct indices
+                const imgWrap = $('#imagePreviewContainer');
+                imgWrap.empty();
+                filesToUpload.forEach(function (f, newIndex) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var html = "<div class='upload__img-box'><div style='background-image: url(" + e.target.result + ")' data-index='" + newIndex + "' data-file='" + f.name + "' class='img-bg'><div class='upload__img-close'>x</div></div></div>";
+                        imgWrap.append(html);
+                    }
+                    reader.readAsDataURL(f);
+                });
+            });
+        }
+        // --- END: Integrated Image Upload and Preview Logic ---
+
+
+        // Fungsi untuk mengkonversi File menjadi Base64
+        function convertFileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Event listener untuk form submission
+        document.getElementById('mempelaiForm').addEventListener('submit', async function (event) {
+            event.preventDefault(); // Mencegah submit form standar
+
+            document.getElementById('loadingModal').style.display = 'flex'; // Tampilkan modal loading
+
+            const formElement = this;
+            const formData = new FormData(formElement); // Mengambil semua data form
+
+            // Daftar ID input teks yang perlu diubah ke Capital Case
+            const textInputIdsToCapitalize = [
+                'namaPemesan', 'namaLengkapWanita', 'namaPanggilanWanita', 'deskripsiWanita',
+                'instagramWanita', 'inisialWanita', // Added inisialWanita
+                'namaLengkapPria', 'namaPanggilanPria', 'deskripsiPria',
+                'instagramPria', 'inisialPria', // Added inisialPria
+                'namaAcara1', 'lokasiAcara1', 'alamatAcara1',
+                'namaAcara2', 'lokasiAcara2', 'alamatAcara2', 'namaAcara3',
+                'lokasiAcara3', 'alamatAcara3',
+                'judulLoveStory1', 'tanggalLoveStory1', 'deskripsiLoveStory1',
+                'judulLoveStory2', 'tanggalLoveStory2', 'deskripsiLoveStory2',
+                'judulLoveStory3', 'tanggalLoveStory3', 'deskripsiLoveStory3',
+                'judulLoveStory4', 'tanggalLoveStory4', 'deskripsiLoveStory4', // Added Love Story 4 fields
+                'namaPemilikRekening1', 'namaBank1', 'whatsappKonfirmasi1', // Added whatsappKonfirmasi1
+                'namaPemilikRekening2', 'namaBank2', 'whatsappKonfirmasi2', // Added whatsappKonfirmasi2
+                'namaPemilikRekening3', 'namaBank3', 'whatsappKonfirmasi3', // Added whatsappKonfirmasi3
+                'namaPenerimaKado', 'alamatPengirimanKado', 'judulLagu',
+                'turutMengundang' // Added turutMengundang
+            ];
+
+            // Iterasi melalui input yang perlu diubah dan terapkan toTitleCase
+            textInputIdsToCapitalize.forEach(id => {
+                const inputElement = document.getElementById(id);
+                if (inputElement && inputElement.value) {
+                    formData.set(id, toTitleCase(inputElement.value));
+                }
+            });
+
+            // Gabungkan waktu acara dan tambahkan ke formData
+            const gabungkanWaktu = (prefix) => {
+                const mulai = document.getElementById(prefix).value || '';
+                const selesai = document.getElementById(`${prefix}Selesai`)?.value || '';
+                const zona = document.getElementById(`zona${prefix.charAt(0).toUpperCase() + prefix.slice(1)}`).value || '';
+                return mulai + (selesai ? ' - ' + selesai : '') + (zona ? ' ' + zona : '');
+            };
+
+            formData.set('waktuAcara1Gabungan', gabungkanWaktu('waktuAcara1'));
+            formData.set('waktuAcara2Gabungan', gabungkanWaktu('waktuAcara2'));
+            formData.set('waktuAcara3Gabungan', gabungkanWaktu('waktuAcara3'));
+
+            // Tambahkan jam acara utama ke formData
+            const jamAcaraUtama = document.getElementById('jamAcaraUtama')?.value || '';
+            formData.set('jamAcaraUtama', jamAcaraUtama);
+
+
+            // --- START: Penanganan Gambar sebagai Base64 untuk MULTI-UPLOAD (UPDATED) ---
+            // Use the filesToUpload array managed by the new preview logic
+            if (document.getElementById('pakaiFoto').value === 'ya' && filesToUpload.length > 0) {
+                formData.delete('fotoUpload[]'); // Hapus entri file asli dari FormData if any
+
+                const base64Promises = filesToUpload.map(file => convertFileToBase64(file));
+
+                try {
+                    const base64Results = await Promise.all(base64Promises);
+
+                    base64Results.forEach((base64Data, index) => {
+                        const file = filesToUpload[index];
+                        // Tambahkan Base64 string dan metadata file dengan indeks unik
+                        formData.append(`mediaData_${index}`, base64Data.split(',')[1]); // Hanya bagian data Base64
+                        formData.append(`mediaMimeType_${index}`, file.type);
+                        formData.append(`mediaFileName_${index}`, file.name);
+                        console.log(`LOG: File ${index + 1} (${file.name}) dikonversi ke Base64 dan ditambahkan ke FormData.`);
+                    });
+                    formData.append('fileCount', base64Results.length); // Beritahu Apps Script berapa banyak file yang diharapkan
+
+                } catch (base64Error) {
+                    console.error("ERROR: Gagal mengkonversi salah satu file ke Base64:", base64Error);
+                    showNotificationModal("Error", "Gagal memproses gambar. Coba lagi.");
+                    document.getElementById('loadingModal').style.display = 'none';
+                    return; // Hentikan proses submit jika konversi gagal
+                }
+            } else {
+                console.log("LOG: Tidak ada file fotoUpload dipilih atau 'pakaiFoto' bukan 'ya'.");
+                formData.delete('fotoUpload[]'); // Pastikan tidak ada jika tidak ada file dipilih
+                formData.delete('fileCount'); // Hapus juga fileCount jika tidak ada foto
+            }
+            // --- END: Penanganan Gambar sebagai Base64 untuk MULTI-UPLOAD ---
+
+            // fungsi buat debugging
+            // console.log("📦 FormData entries before fetch:");
+            // for (let [key, value] of formData.entries()) {
+            //     // Log hanya beberapa karakter awal untuk file agar konsol tidak penuh
+            //     if (typeof value === 'string' && value.length > 100) { // Untuk Base64 string
+            //         console.log(`${key}: ${value.substring(0, 50)}... (Base64 data)`);
+            //     } else if (value instanceof File) { // This should not happen for photoUpload[] now
+            //         console.log(`${key}: File - ${value.name} (${value.size} bytes, ${value.type})`);
+            //     } else {
+            //         console.log(`${key}: ${value}`);
+            //     }
+            // }
+
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: formData // Mengirimkan FormData secara langsung. Browser akan mengatur Content-Type.
+            })
+                .then(response => response.text()) // Ambil respons sebagai teks
+                .then(responseText => {
+                    document.getElementById('loadingModal').style.display = 'none';
+                    console.log('Response from Apps Script:', responseText);
+                    try {
+                        const result = JSON.parse(responseText); // Coba parse sebagai JSON
+                        if (result.result === 'success') {
+                            showNotificationModal("Sukses!", "Data berhasil dikirim!");
+                            // formElement.reset(); // Mengosongkan form setelah berhasil - DIHAPUS SESUAI PERMINTAAN
+                            // Clear previews and files after successful submission
+                            $('#imagePreviewContainer').empty();
+                            filesToUpload = [];
+                            tampilkanUpload(); // Reset tampilan upload foto
+                        } else {
+                            showNotificationModal("Gagal!", "Terjadi kesalahan: " + (result.error || "Unknown error"));
+                        }
+                    } catch (e) {
+                        // Jika bukan JSON, tampilkan respons teks mentah
+                        showNotificationModal("Gagal!", "Terjadi kesalahan saat kirim data: " + responseText);
+                        console.error('❌ Gagal parse respons JSON:', e, 'Respons mentah:', responseText);
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('loadingModal').style.display = 'none';
+                    console.error('❌ Gagal mengirim formulir. Periksa console browser untuk detail.', error);
+                    showNotificationModal("Gagal!", "Gagal mengirim formulir. Periksa konsol browser untuk detail.");
+                });
+        });
+
+        // Inisialisasi tampilan saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('loadingModal').style.display = 'none';
+            document.getElementById('notificationModal').style.display = 'none';
+            tampilkanUpload();
+            toggleSelesai(1);
+            toggleSelesai(2);
+            toggleSelesai(3);
+
+            // Accordion functionality
+            var acc = document.getElementsByClassName("accordion");
+            for (var i = 0; i < acc.length; i++) {
+                acc[i].addEventListener("click", function () {
+                    this.classList.toggle("active");
+                });
+            }
+            // Trigger initial reordering based on default selection
+            document.getElementById('urutan').dispatchEvent(new Event('change'));
+        });
+    </script>
+</body>
+
+</html>
