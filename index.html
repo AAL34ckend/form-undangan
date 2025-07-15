@@ -687,7 +687,7 @@
                         </select>
                     </div>
                     <div id="uploadFoto" style="display: none;" class="form-group full-width">
-                        <label>- Unggah Foto (Maks. 20 gambar, maks 20MB/gambar)</label>
+                        <label>- Unggah Foto (Maks. 15 gambar, maks 5MB/gambar)</label>
                         <label>- Jika anda ingin mengirim foto nanti, abaikan upload foto ini</label>
                         <div class="upload__box">
                             <div class="upload__btn-box">
@@ -1540,8 +1540,8 @@
         });
 
         function ImgUploadCustom() {
-            const maxFiles = 20; // Maksimal 15 gambar
-            const maxFileSize = 30 * 1024 * 1024; // Maksimal 20MB per gambar (20 * 1024 * 1024 bytes)
+            const maxFiles = 15; // Maksimal 15 gambar
+            const maxFileSize = 5 * 1024 * 1024; // Maksimal 5MB per gambar (20 * 1024 * 1024 bytes)
 
             $('#fotoUpload').on('change', function (e) {
                 const imgWrap = $('#imagePreviewContainer');
